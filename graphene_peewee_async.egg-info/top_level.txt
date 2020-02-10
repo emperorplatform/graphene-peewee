@@ -1,2 +1,0 @@
-graphene_peewee_async
-tests
