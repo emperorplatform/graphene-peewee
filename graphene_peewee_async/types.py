@@ -88,8 +88,8 @@ class PeeweeObjectType(ObjectType):
         model = cls._meta.model
         pk_field_name = model._meta.primary_key.name
         try:
-            # TODO: pass as plain int (use `prepare_filters` inside)
-            return (cls._meta.db.execute(get_query(model, info, filters={pk_field_name: pk_value})))
+            # TODO: pass as plain int (use `prepare_filters` inside)            
+            return (get_query(model, info, filters={pk_field_name: pk_value}).get())
         except model.DoesNotExist:
             return None
 

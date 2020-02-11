@@ -1,3 +1,14 @@
-*.pyc
+__pycache__/
+.DS_Store
 .vscode/
-
+env/
+*.pyc
+logs/
+secrets.py
+tradeservice/secrets.py
+id_rsa
+.coverage
+coverage.xml
+htmlcov/
+*.egg-info
+.tox

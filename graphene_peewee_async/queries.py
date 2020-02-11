@@ -10,7 +10,7 @@ from peewee import (
 from graphene.utils.str_converters import to_snake_case
 
 from .utils import get_requested_models, get_field_from_selections
-
+from copy import copy
 
 TOTAL_FIELD = '__total__'
 MODELS_DELIMITER = '__'
@@ -143,6 +143,7 @@ def paginate(query, page, paginate_by):
 
 def get_query(model, info, filters={}, order_by=[], page=None, paginate_by=None, total_query=None):
     query = None
+    orig_query = copy(model)
     if isinstance(model, Query):
         query = model
         model = query.objects().model
@@ -162,10 +163,11 @@ def get_query(model, info, filters={}, order_by=[], page=None, paginate_by=None,
             if total_query:
                 total = NodeList([total_query]).alias(TOTAL_FIELD)
             else:
-                total = NodeList([fn.Count(SQL('*')), fn.Over()], glue=' ').alias(TOTAL_FIELD)
+                count = orig_query.select().count()
+                count_node = [SQL(f'{count}')]
+                total = NodeList(count_node).alias(TOTAL_FIELD)
             query._returning = tuple(query._returning) + (total,)
         if not query._returning:
             query = query.select(SQL('1'))  # bottleneck
-        # query = query.aggregate_rows()
         return query
     return model

@@ -16,8 +16,8 @@ class ApiTest(BaseTest):
         cls.schema, cls.executor = generate_schema(cls.db, [Book, Author])
 
     def setUp(self):
-        self.db.execute(Book.delete())
-        self.db.execute(Author.delete())
+        Book.delete().execute()
+        Author.delete().execute()
 
     def query(self, query, variables={}):
         pre_result = self.schema.execute(

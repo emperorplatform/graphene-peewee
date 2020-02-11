@@ -287,7 +287,6 @@ class UpdateOneMutation(BaseMutation):
         else:
             result = query.execute()
 
-
         try:
             obj = list(result)[0]
         except IndexError:

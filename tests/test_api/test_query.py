@@ -1,4 +1,4 @@
-from tests.common import ApiTest, Author, Book
+from tests.common import ApiTest, Author, Book, db
 
 
 class TestQuery(ApiTest):
@@ -8,7 +8,7 @@ class TestQuery(ApiTest):
             name='foo', 
             rating=42
         )
-        author.save
+        author.save()
         
         book = Book(
             name='bar', 
@@ -60,7 +60,8 @@ class TestQuery(ApiTest):
             name='bar1', 
             year=2002, 
             author=author
-        ).save()
+        )
+        book1.save()
         
         book2 = Book(
             name='bar2', 
@@ -144,6 +145,11 @@ class TestQuery(ApiTest):
             rating=42
         )
         author.save()
+        author2 = Author(
+            name='bar', 
+            rating=42
+        )
+        author2.save()
         book1 = Book(
             name='bar1', 
             year=2001, 
@@ -156,6 +162,12 @@ class TestQuery(ApiTest):
             author=author
         )
         book2.save()
+        book3 = Book(
+            name='bar1', 
+            year=2002, 
+            author=author2
+        )
+        book3.save()
 
         result = self.query('''
             query {
