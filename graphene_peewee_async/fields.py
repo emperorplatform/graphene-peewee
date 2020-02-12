@@ -51,7 +51,7 @@ class PeeweeNodeField(Field):
         query = resolver(root, info, **args)
         if query is None:
             # filters = args.get(FILTERS_FIELD, {})
-            query = self._type.get_node(info, args[self.primary_key_name])
+            query = self._type.get_node(info, args.get(self.primary_key_name, None))
         return query
 
     def get_resolver(self, parent_resolver):

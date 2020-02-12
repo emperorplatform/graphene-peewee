@@ -114,7 +114,7 @@ def filter(query, filters, alias_map={}):
 def join(query, models, src_model=None):
     src_model = src_model or query.model
     for model, child_models, requested_fields in models:
-        query = query.select(*(query._returning + requested_fields))
+        query = query.select(*(list(query._returning) + requested_fields))
         query = query.switch(src_model)
         query = query.join(model, JOIN.LEFT_OUTER)  # TODO: on
         query = join(query, child_models, model)
@@ -169,5 +169,6 @@ def get_query(model, info, filters={}, order_by=[], page=None, paginate_by=None,
             query._returning = tuple(query._returning) + (total,)
         if not query._returning:
             query = query.select(SQL('1'))  # bottleneck
+        
         return query
     return model

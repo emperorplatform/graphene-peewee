@@ -1,4 +1,4 @@
-from tests.common import ApiTest, Author, Book, db
+from tests.common import ApiTest, Author, Book, Page, db
 
 
 class TestQuery(ApiTest):
@@ -45,6 +45,37 @@ class TestQuery(ApiTest):
                         'name': author.name,
                         'rating': author.rating
                     }
+                }
+            }
+        )
+
+    def test_query_empty(self):
+        author = Author(
+            name='foo', 
+            rating=42
+        )
+        author.save()
+        book = Book(
+            name='bar', 
+            year=2000, 
+            author=author
+        )
+        book.save()
+
+        result = self.query('''
+            query {
+                book {
+                    id
+                }
+            }
+        ''')
+
+        self.assertIsNone(result.errors)
+        self.assertEqual(
+            result.data,
+            {
+                'book': {
+                    'id': book.id,
                 }
             }
         )
@@ -138,6 +169,64 @@ class TestQuery(ApiTest):
                 }
             }
         )
+    
+    def test_query_many_nested_foreign_key_relation(self):
+        author = Author(
+            name='foo', 
+            rating=42
+        )
+        author.save()
+        
+        book = Book(
+            name='bar', 
+            year=2000, 
+            author=author
+        )
+        book.save()
+
+        page = Page(
+            chapter=4,
+            number=3,
+            book=book
+        )
+        page.save()
+
+        result = self.query('''
+            query {
+                pages {
+                    edges {
+                        node {
+                            book {
+                                author {
+                                    name
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        ''')
+
+        self.assertIsNone(result.errors)
+        self.assertEqual(
+            result.data,
+            {
+                'pages': {
+                    'edges': [
+                        {
+                            'node': {
+                                'book': {
+                                    'author': {
+                                        'name': 'foo'
+                                    }
+                                }
+                            }
+
+                        }
+                    ]
+                }
+            }
+        )
 
     def test_filter_subset_query(self):
         author = Author(
@@ -199,24 +288,42 @@ class TestQuery(ApiTest):
             result.data,
             {
                 'authors': {
-                    'count': 1,
-                    'total': 1,
-                    'edges': [{
-                        'node': {
-                            'id': author.id,
-                            'name': author.name,
-                            'book_set': {
-                                'count': 1,
-                                'total': 1,
-                                'edges': [{
-                                    'node': {
-                                        'id': book1.id,
-                                        'name': book1.name
-                                    }
-                                }]
+                    'count': 2,
+                    'total': 2,
+                    'edges': [
+                        {
+                            'node': {
+                                'id': author.id,
+                                'name': author.name,
+                                'book_set': {
+                                    'count': 1,
+                                    'total': 2,
+                                    'edges': [{
+                                        'node': {
+                                            'id': book1.id,
+                                            'name': book1.name
+                                        }
+                                    }]
+                                }
+                            }
+                        },
+                        {
+                            'node': {
+                                'id': author2.id,
+                                'name': author2.name,
+                                'book_set': {
+                                    'count': 1,
+                                    'total': 1,
+                                    'edges': [{
+                                        'node': {
+                                            'id': book3.id,
+                                            'name': book3.name
+                                        }
+                                    }]
+                                }
                             }
                         }
-                    }]
+                    ]
                 }
             }
         )

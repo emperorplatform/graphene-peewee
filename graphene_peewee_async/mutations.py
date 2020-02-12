@@ -212,7 +212,7 @@ class CreateManyMutation(BaseMutation):
         return super().generate(node_class, connection_class, args, attrs)
 
     @classmethod
-    def last_insert_id_async(cls, cursor):
+    def last_insert_id(cls, cursor):
         return cursor.fetchall()
 
     @classmethod

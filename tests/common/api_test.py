@@ -2,7 +2,7 @@ import json
 
 from graphql.execution import ExecutionResult
 
-from .models import db, Book, Author
+from .models import db, Book, Author, Page
 from .base_test import BaseTest
 from .schema import generate_schema
 
@@ -13,9 +13,10 @@ class ApiTest(BaseTest):
     def setUpClass(cls):
         super().setUpClass()
         cls.db = db
-        cls.schema, cls.executor = generate_schema(cls.db, [Book, Author])
+        cls.schema, cls.executor = generate_schema(cls.db, [Book, Author, Page])
 
     def setUp(self):
+        Page.delete().execute()
         Book.delete().execute()
         Author.delete().execute()
 

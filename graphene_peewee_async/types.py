@@ -8,7 +8,7 @@ from .queries import get_query
 from .registry import Registry, get_global_registry
 from .converter import convert_peewee_field_with_choices, get_foreign_key_id_field
 from .utils import get_reverse_fields, is_valid_peewee_model
-from peewee import Database
+from peewee import Database, Proxy
 
 def get_foreign_key_field_name(from_field_name, to_field_name):
     return '{}_{}'.format(from_field_name, to_field_name)
@@ -50,8 +50,8 @@ class PeeweeObjectType(ObjectType):
         assert is_valid_peewee_model(model), (
             'You need to pass a valid Peewee Model in {}.Meta, received "{}".'
         ).format(cls._meta.name, model)
-        assert isinstance(db, Database), (
-            'You need to pass a valid Peewee Database in {}.Meta, received "{}".'
+        assert isinstance(db, Database) or isinstance(db, Proxy), (
+            'You need to pass a valid Peewee Database/Proxy in {}.Meta, received "{}".'
         ).format(cls._meta.name, db)
 
         _meta = PeeweeOptions(cls)
@@ -87,9 +87,12 @@ class PeeweeObjectType(ObjectType):
     def async_get_node(cls, info, pk_value):
         model = cls._meta.model
         pk_field_name = model._meta.primary_key.name
+        filters = None
+        if pk_value:
+            filters = {pk_field_name: pk_value}
         try:
             # TODO: pass as plain int (use `prepare_filters` inside)            
-            return (get_query(model, info, filters={pk_field_name: pk_value}).get())
+            return (get_query(model, info, filters=filters).get())
         except model.DoesNotExist:
             return None
 
@@ -105,8 +108,8 @@ class PeeweeMutation(Mutation):
         assert is_valid_peewee_model(model), (
             'You need to pass a valid Peewee Model in {}.Meta, received "{}".'
         ).format(cls._meta.name, model)
-        assert isinstance(db, Database), (
-            'You need to pass a valid Peewee Database in {}.Meta, received "{}".'
+        assert isinstance(db, Database) or isinstance(db, Proxy), (
+            'You need to pass a valid Peewee Database/Proxy in {}.Meta, received "{}".'
         ).format(cls._meta.name, db)
         _meta = PeeweeOptions(cls)
         _meta.model = model

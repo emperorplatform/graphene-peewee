@@ -28,8 +28,14 @@ class Book(BaseModel):
     year = IntegerField()
     author = ForeignKeyField(Author)
 
+class Page(BaseModel):
+
+    chapter = IntegerField()
+    number = IntegerField()
+    book = ForeignKeyField(Book)
 
 db.create_tables([
     Author,
     Book,
+    Page,
 ], safe=True)
