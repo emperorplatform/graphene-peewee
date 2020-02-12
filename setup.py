@@ -3,7 +3,7 @@ import os
 from setuptools import find_packages, setup
 
 
-package_name = 'graphene_peewee_async'
+package_name = 'graphene_peewee'
 hyphen_package_name = package_name.replace('_', '-')
 
 
@@ -23,18 +23,13 @@ setup(
     name=hyphen_package_name,
     version=read_version(),
 
-    description='Graphene peewee-async integration',
+    description='Graphene peewee integration',
     long_description=open('README.rst').read(),
-
-    url='https://github.com/insolite/{}'.format(hyphen_package_name),
-
-    author='Oleg Krasnikov',
-    author_email='a.insolite@gmail.com',
 
     license='MIT',
 
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 3 - beta',
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Libraries',
         'Programming Language :: Python :: 3',
@@ -49,13 +44,11 @@ setup(
     install_requires=[
         'graphene>=2.0',
         'peewee>=3.1.0',
-        'peewee_async>=0.6.0a0',
         'singledispatch>=3.4',
         'iso8601>=0.1',
     ],
     tests_require=[
         'inflection>=0.13',
-        'aiopg>=0.15.0',
     ],
     include_package_data=True,
     zip_safe=False,

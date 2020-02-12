@@ -4,10 +4,10 @@ import inflection
 from graphene import Schema, ObjectType
 from graphql.execution.executors.sync import SyncExecutor
 
-from graphene_peewee_async.fields import PeeweeNodeField, PeeweeConnectionField, PeeweeConnection
-from graphene_peewee_async.registry import Registry
-from graphene_peewee_async.types import PeeweeObjectType
-from graphene_peewee_async.mutations import (
+from graphene_peewee.fields import PeeweeNodeField, PeeweeConnectionField, PeeweeConnection
+from graphene_peewee.registry import Registry
+from graphene_peewee.types import PeeweeObjectType
+from graphene_peewee.mutations import (
     CreateOneMutation,
     CreateManyMutation,
     UpdateOneMutation,

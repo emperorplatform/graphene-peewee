@@ -1,10 +1,8 @@
 =====================
-graphene-peewee-async
+graphene-peewee
 =====================
 
-`graphene <https://github.com/graphql-python/graphene>`_ + `peewee-async <https://github.com/05bit/peewee-async>`_ integration :heart:
-
-`Changelog <https://github.com/insolite/graphene-peewee-async/blob/master/CHANGELOG.md>`_
+`graphene <https://github.com/graphql-python/graphene>`_ + `peewee <https://github.com/coleifer/peewee>`_ integration :heart:
 
 Features
 ========
@@ -83,8 +81,8 @@ Usage sample
                 }
             }
         }''',
-        return_promise=True,
-        executor=AsyncioExecutor()
+        return_promise=False,
+        executor=SyncExecutor()
     )
 
     # Await result if required (failed queries are usually returning result
@@ -124,14 +122,6 @@ Usage sample
     # }}
 
 
-Advanced usage
-==============
-
-Be sure to check `API tests <https://github.com/insolite/graphene-peewee-async/tree/master/tests/test_api>`_
-for advanced query/mutation usages and
-`auto-generating <https://github.com/insolite/graphene-peewee-async/blob/master/tests/common/schema.py>`_
-such schema for them.
-
 Install
 =======
 
@@ -139,4 +129,4 @@ Install as package:
 
 .. code-block:: bash
 
-    pip3 install graphene-peewee-async
+    pip3 install graphene-peewee
