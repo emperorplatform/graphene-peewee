@@ -102,7 +102,10 @@ def filter(query, filters, alias_map={}):
     new_query = query.clone()
     for field in dq_joins:
         if isinstance(field, (ForeignKeyField, FieldAlias)):
-            lm, rm = field.model, field.rel_model
+            if hasattr(field, 'source'):
+                lm, rm = field.source, field.rel_model
+            else:
+                lm, rm = field.model, field.rel_model
             field_obj = field
         elif isinstance(field, BackrefAccessor):
             lm, rm = field.field.rel_model, field.rel_model

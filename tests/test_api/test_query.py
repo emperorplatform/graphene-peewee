@@ -170,6 +170,81 @@ class TestQuery(ApiTest):
             }
         )
     
+    def test_query_many_filter_on_foreign_key(self):
+        self.maxDiff = None
+        author = Author(
+            name='foo', 
+            rating=42
+        )
+        author.save()
+        
+        book1 = Book(
+            name='bar1', 
+            year=2002, 
+            author=author
+        )
+        book1.save()
+        
+        book2 = Book(
+            name='bar2', 
+            year=2001, 
+            author=author
+        )
+        book2.save()
+        
+        book3 = Book(
+            name='bar3', 
+            year=2003, 
+            author=author
+        )
+        book3.save()
+
+        result = self.query('''
+            query {
+                books (
+                    filters: {
+                        author_id: 1
+                    },
+                ) {
+                    edges {
+                        node {
+                            id
+                            name
+                            year
+                        }
+                    }
+                }
+            }
+        ''')
+
+        self.assertIsNone(result.errors)
+        self.assertEqual(
+            result.data,
+            {
+                'books': {
+                    'edges': [{
+                        'node': {
+                            'id': book1.id,
+                            'name': book1.name,
+                            'year': book1.year
+                        }
+                    }, {
+                        'node': {
+                            'id': book2.id,
+                            'name': book2.name,
+                            'year': book2.year
+                        }
+                    }, {
+                        'node': {
+                        'id': book3.id,
+                        'name': book3.name,
+                        'year': book3.year
+                        }
+                    }]
+                }
+            }
+        )
+    
     def test_query_many_nested_foreign_key_relation(self):
         author = Author(
             name='foo', 
