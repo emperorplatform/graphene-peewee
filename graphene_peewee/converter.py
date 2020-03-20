@@ -68,7 +68,6 @@ def convert_field_to_id(field, registry=None):
 @convert_peewee_field.register(peewee.SmallIntegerField)
 @convert_peewee_field.register(peewee.BigIntegerField)
 @convert_peewee_field.register(peewee.IntegerField)
-@convert_peewee_field.register(peewee.TimestampField)
 @add_nonnull_to_field
 def convert_field_to_int(field, registry=None):
     return Int(description=field.help_text)
@@ -88,6 +87,7 @@ def convert_field_to_float(field, registry=None):
 
 @convert_peewee_field.register(peewee.DateField)
 @convert_peewee_field.register(peewee.DateTimeField)
+@convert_peewee_field.register(peewee.TimestampField)
 @add_nonnull_to_field
 def convert_date_to_string(field, registry=None):
     return DateTime(description=field.help_text)
