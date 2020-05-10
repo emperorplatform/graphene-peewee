@@ -9,3 +9,5 @@ This release also contains various minor bug fixes and improvements, including p
 Several new unit tests have been added, and they've been chanegd to use the in-memory SQLite3 database instead of Postgres.
 
 Since this is an early release, it has undergone limited testing and usage. Additional testers would be highly appreciated.
+
+Major credit to `insolite <https://github.com/insolite>`_ for developing `graphene-peewee-async <https://github.com/insolite/graphene-peewee-async>`_.
