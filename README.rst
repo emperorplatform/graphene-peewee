@@ -7,3 +7,5 @@ This is an early port of `graphene-peewee-async <https://github.com/insolite/gra
 This release also contains various minor bug fixes and improvements, including proper deserialization of timestamp fields, compatibility with databases initialized as Proxy objects, removal of various Postgres-specific features such as RETURNING so that other databases like MySQL and SQLite3 can be used, and a few other, minor bug fixes.
 
 Several new unit tests have been added, and they've been chanegd to use the in-memory SQLite3 database instead of Postgres.
+
+Since this is an early release, it has undergone limited testing and usage. Additional testers would be highly appreciated.
